@@ -10,26 +10,27 @@ router.get('/', (req, res) => {
     })
 })
 
-// router.post('/id:', (req, res) =>
 router.post('/', (req, res) =>
   User.create(req.body)
     .then(user => {
       res.status(201).send(user);
     })
+    .catch((error) => {
+      console.log('mensagem de erro', error)
+    })
 )
 
-router.put('/id', (req, res) => User.update({ ...req.body }, { where: { id: req.params.id } })
+router.put('/:id', (req, res) => User.update({ ...req.body }, { where: { id: req.params.id } })
   .then(() => {
     User
-      .findByPK(req.params.id)
+      .findOne({ where: { id: req.params.id } })
       .then(user => res.send(user.dataValues))
-      .then(userId.send(userId,dataValues));
+      .then(userId.send(userId, dataValues));
   })
 )
 
 router.get("/:id", (req, res) => {
-  User.findOne({ where: { id: req.params.id } }
-  )
+  User.findOne({ where: { id: req.params.id } })
     .then((user) => res.send(user));
 })
 
