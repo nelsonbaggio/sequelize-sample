@@ -1,32 +1,33 @@
 const router = require('express').Router();
+// const User = require('../app/models/user');
 const models = require('../app/models');
 const User = models.User;
 
 //findAll, findOne
 router.get('/', (req, res) => {
   User.findAll()
-    .then(users => {
-      res.send(users)
+    .then(user => {
+      res.send(user);
     })
 })
 
 router.post('/', (req, res) =>
   User.create(req.body)
     .then(user => {
-      res.status(201).send(user);
+      res.status(201).send({msg: 'Usuário criado com sucesso', user});
     })
     .catch((error) => {
-      console.log('mensagem de erro', error)
+      console.log('mensagem de erro:', error)
     })
 )
 
-router.put('/:id', (req, res) => User.update({ ...req.body }, { where: { id: req.params.id } })
-  .then(() => {
-    User
-      .findOne({ where: { id: req.params.id } })
-      .then(user => res.send(user.dataValues))
-      .then(userId.send(userId, dataValues));
-  })
+router.put('/:id', (req, res) =>
+  User.update({ ...req.body }, { where: { id: req.params.id } })
+    .then(() => {
+      User
+        .findOne({ where: { id: req.params.id } })
+        .then(user => res.send(user.dataValues))
+    })
 )
 
 router.get("/:id", (req, res) => {
