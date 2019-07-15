@@ -15,17 +15,23 @@ router.post('/', (req, res) => {
     .catch(error => console.log('mensagem de erro', error))
 })
 
-router.put('/:id', (req, res) => Product.update({ ...req.body }, { where: { id: req.params.id } })
-  .then(() => {
-    Product
-      .findOne({ where: { id: req.params.id } })
-      .then(product => res.send(product.dataValues))
-  })
-)
+router.put('/:id', (req, res) => {
+  Product.update({ ...req.body }, { where: { id: req.params.id } })
+    .then(() => {
+      Product
+        .findOne({ where: { id: req.params.id } })
+        .then(product => res.send(product.dataValues))
+    })
+})
 
 router.get("/:id", (req, res) => {
-  User.findOne({ where: { id: req.params.id } })
-    .then((product) => res.send(product));
+  Product.findOne({ where: { id: req.params.id } })
+    .then(product => res.send(product));
+})
+
+router.delete("/:id", (req, res) => {
+  Product.destroy({ where: { id: req.params.id } })
+    .then(() => res.sendStatus(200))
 })
 
 module.exports = router;

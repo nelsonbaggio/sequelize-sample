@@ -28,18 +28,24 @@ router.post('/', (req, res) => {
     .catch(error => console.log('mensagem de erro', error))
 })
 
-router.put('/:id', (req, res) => User.update({ ...req.body }, { where: { id: req.params.id } })
-  .then(() => {
-    User
-      .findOne({ where: { id: req.params.id } })
-      .then(user => res.send(user.dataValues))
-      .then(userId.send(userId, dataValues));
-  })
-)
+router.put('/:id', (req, res) => {
+  const { products, user, status } = req.body;
+  Order
+    .findOne({ where: { id: req.params.id } })
+    .then(order => {
+      if (products && products.length > 0) {
+        order.setProducts(products, { save: false });
+      }
+      order.setUser(user, { save: false });
+      order.status = status;
+      order.save()
+        .then(order => res.send(order.dataValues));
+    });
+})
 
 router.get("/:id", (req, res) => {
-  User.findOne({ where: { id: req.params.id } })
-    .then((user) => res.send(user));
+  Order.findOne({ where: { id: req.params.id } })
+    .then(order => res.send(order));
 })
 
 router.delete('/:id', (req, res) => {
