@@ -1,14 +1,20 @@
-const express = require('express'); //criou o express e importou
-const app = express(); //quais rotas e em que porta ele vai ouvir
-// const OrderItem = models.orderItem;
+const express = require('express');
+const app = express();
+const models = require('./app/models');
 
-//parse body atualmente
 app.use(express.json());
 
-//definir rotas
 app.use('/users', require('./routes/users'));
 app.use('/products', require('./routes/products'));
 app.use('/orders', require('./routes/orders'));
 
-//definir a porta
+models.Product.sync()
+.then(() => console.log('Product Sync!'));
+
+models.Order.sync()
+.then(() => console.log('Order Sync!'));
+
+models.User.sync()
+.then(() => console.log('User Sync!'));
+
 app.listen(3229, () => { console.log('começou o app') });
