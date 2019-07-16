@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const models = require('../app/models');
 const Order = models.Order;
+const Product = models.Product;
+const User = models.User;
 
 router.get('/', (req, res) => {
   Order.findAll({
     include: [{
-      model: models.Product,
+      model: Product,
       as: 'products',
       through: { attibutes: [] }
-    }]
+    },
+    User]
   })
     .then(orders => res.send(orders))
     .catch(error => console.log('Erro ao buscar pedidos: ', error));
@@ -33,7 +36,7 @@ router.put('/:id', (req, res) => {
   Order
     .findOne({ where: { id: req.params.id } })
     .then(order => {
-      if (products && products.length > 0) {
+      if (products) {
         order.setProducts(products, { save: false });
       }
       order.setUser(user, { save: false });
@@ -49,7 +52,7 @@ router.get("/:id", (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  User.destroy({ where: { id: req.params.id } })
+  Order.destroy({ where: { id: req.params.id } })
     .then(() => res.sendStatus(200))
 })
 
